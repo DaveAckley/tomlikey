@@ -35,8 +35,8 @@ repos:
   rev: bf7a16254ec96b084a6caf3d435ec18f0f245cc7  # frozen: 23.3.0
   hooks:
   - id: black
-- repo: https://github.com/myint/docformatter
-  rev: 8b8dae1d990e2e4fec7ff6704a79c23a403cd605  # frozen: v1.5.0
+- repo: https://github.com/PyCQA/docformatter
+  rev: 4e625cd544e748dfaa82840eaf25c1a5a68e195a  # frozen: v1.7.1
   hooks:
   - id: docformatter
 - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -58,7 +58,7 @@ repos:
     - flake8-builtins
     - flake8-comprehensions
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: b84480de6124681d551749528ab4b42c2269df8c  # frozen: v1.2.0
+  rev: bd424e49d4f0181d4c8b8909a8cd5ce9eb058044  # frozen: v1.3.0
   hooks:
   - id: mypy
     args: ["--scripts-are-modules"]
