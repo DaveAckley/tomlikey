@@ -33,8 +33,6 @@ ILLEGAL_COMMENT_CHARS = ILLEGAL_BASIC_STR_CHARS
 
 TOML_WS = frozenset(" \t")
 TOML_WS_AND_NEWLINE = TOML_WS | frozenset("\n")
-VALKEY_INITIAL_CHARS = frozenset(string.ascii_letters + "_") # Subset of VALKEY_BODY_CHARS
-VALKEY_BODY_CHARS = frozenset(string.ascii_letters + string.digits + "_")
 BARE_KEY_CHARS = frozenset(string.ascii_letters + string.digits + "-_")
 KEY_INITIAL_CHARS = BARE_KEY_CHARS | frozenset("\"'")
 HEXDIGIT_CHARS = frozenset(string.hexdigits)
@@ -583,21 +581,6 @@ def parse_basic_str(src: str, pos: Pos, *, multiline: bool) -> tuple[Pos, str]:
         pos += 1
 
 
-def parse_valkey(src: str, pos: Pos) -> tuple[Pos, str]:
-    result = ""
-    start_pos = pos
-    while True:
-        try:
-            char = src[pos]
-        except IndexError:
-            char = None
-        if char in VALKEY_BODY_CHARS:
-            result += src[pos]
-            pos += 1
-            continue
-        break
-    return pos, result
-
 def parse_value(  # noqa: C901
     src: str, pos: Pos, parse_float: ParseFloat
 ) -> tuple[Pos, Any]:
@@ -662,11 +645,6 @@ def parse_value(  # noqa: C901
     first_four = src[pos : pos + 4]
     if first_four in {"-inf", "+inf", "-nan", "+nan"}:
         return pos + 4, parse_float(first_four)
-
-    # 'key' like unquoted variable names
-    # We come in last so true, false, nan, etc still have special interpretations
-    if char in VALKEY_INITIAL_CHARS:
-        return parse_valkey(src, pos)
 
     raise suffixed_err(src, pos, "Invalid value")
 
